@@ -1,102 +1,185 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/12/17 0017
- * Time: 17:44
- */
 
-/**
- * Class Node
- * PHP模拟链表的基本操作
- */
 class Node
 {
-    public $data = '';
-    public $next = null;
+    public $id;
+    public $name;
+    public $next;
+
+    public function __construct($id, $name)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->next = null;
+    }
 }
 
-//初始化
-function init($linkList)
+class SingleLinkList
 {
-    $linkList->data = 0; //用来记录链表长度
-    $linkList->next = null;
+
+    //链表头节点
+    private $header;
+
+    public function __construct($id = null, $name = null)
+    {
+        $this->header = new Node($id, $name);
+    }
+
+    /**
+     * 获取链表长度
+     *
+     * @return int
+     */
+    public function getLength()
+    {
+        $length = 0;
+
+        $current = $this->header;
+        while ($current->next != null) {
+
+            $current = $current->next;
+            $length++;
+        }
+        return $length;
+    }
+
+    /**
+     * 添加节点
+     *
+     * @param Node $node
+     */
+    public function addNode(Node $node)
+    {
+        $current = $this->header;
+        while ($current->next != null) {
+
+            if ($current->next->id > $node->id) {
+                break;
+            }
+            $current = $current->next;
+        }
+
+        $node->next = $current->next;
+        $current->next = $node;
+    }
+
+    /**
+     * 获取节点
+     *
+     * @param $id
+     * @return string
+     */
+    public function getNode($id)
+    {
+        $current = $this->header;
+        while ($current->next != null) {
+
+            if ($current->next->id == $id) {
+
+                return $current->next->name;
+            }
+            $current = $current->next;
+        }
+
+        return '未找到id为' . $id . '的节点';
+    }
+
+    /**
+     * 获取链表
+     *
+     * @return array
+     */
+    public function getNodeList()
+    {
+        $current = $this->header;
+        if ($current->next == null) {
+            return [];
+        }
+        $nodes = [];
+
+        while ($current->next != null) {
+            $nodes[] = [
+                'id' => $current->next->id,
+                'name' => $current->next->name
+            ];
+            $current = $current->next;
+        }
+
+        return $nodes;
+    }
+
+    /**
+     * 删除节点
+     *
+     * @param $id
+     */
+    public function delNode($id)
+    {
+        $current = $this->header;
+        $flag = false;
+        while ($current->next != null) {
+            if ($current->next->id == $id) {
+                $flag = true;
+                break;
+            }
+            $current = $current->next;
+        }
+        if ($flag) {
+            $current->next = $current->next->next;
+        } else {
+            echo '未找到id=' . $id . '的节点！<br>';
+        }
+    }
+
+    /**
+     * 更新节点
+     *
+     * @param $id
+     * @param $name
+     */
+    public function updateNode($id, $name)
+    {
+        $current = $this->header;
+
+        while ($current->next != null) {
+            if ($current->id == $id) {
+                break;
+            }
+            $current = $current->next;
+        }
+        $current->name = $name;
+    }
+
+    /**
+     * 节点是否为空
+     *
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return $this->header == null;
+    }
+
+    /**
+     * 清空节点
+     */
+    public function clear()
+    {
+        $this->header = null;
+    }
 }
 
-//头插法创建链表
-function createHead(&$linkList, $length)
-{
-    for ($i = 0; $i < $length; $i++) {
-        $newNode = new Node();
-        $newNode->data = $i;
-        $newNode->next = $linkList->next;//因为PHP中对象本身就是引用所以不用再可用“&”
-        $linkList->next = $newNode;
-        $linkList->data++;
-    }
-}
+$lists = new SingleLinkList();
+$lists->addNode(new Node (5, 'eeeeee'));
+$lists->addNode(new Node (1, 'aaaaaa'));
+$lists->addNode(new Node (6, 'ffffff'));
+$lists->addNode(new Node (4, 'dddddd'));
+$lists->addNode(new Node (3, 'cccccc'));
+$lists->addNode(new Node (2, 'bbbbbb'));
 
-//尾插法创建链表
-function createTail(&$linkList, $length)
-{
-    $r = $linkList;
-    for ($i = 0; $i < $length; $i++) {
-        $newNode = new Node();
-        $newNode->data = $i;
-        $newNode->next = $r->next;
-        $r->next = $newNode;
-        $r = $newNode;
-        $linkList->data++;
-    }
-}
+//删除节点
+$lists->delNode(3);
+//更新节点
+$lists->updateNode(2, 'bbbbbbb');
 
-//在指定位置插入指定元素
-function insert($linkList, $pos, $elem)
-{
-    if ($pos < 1 && $pos > $linkList->data + 1) {
-        echo "插入位置错误！";
-    }
-    $p = $linkList;
-    for ($i = 1; $i < $pos; $i++) {
-        $p = $p->next;
-    }
-    $newNode = new Node();
-    $newNode->data = $elem;
-    $newNode->next = $p->next;
-    $p->next = $newNode;
-}
-
-//删除指定位置的元素
-function delete($linkList, $pos)
-{
-    if ($pos < 1 && $pos > $linkList->data + 1) {
-        echo "位置不存在！";
-    }
-    $p = $linkList;
-    for ($i = 1; $i < $pos; $i++) {
-        $p = $p->next;
-    }
-    $q = $p->next;
-    $p->next = $q->next;
-    unset($q);
-    $linkList->data--;
-}
-
-//输出链表数据
-function show($linkList)
-{
-    $p = $linkList->next;
-    while ($p != null) {
-        echo $p->data . " ";
-        $p = $p->next;
-    }
-    echo '<br/>';
-}
-
-$linkList = new Node();
-init($linkList);//初始化
-createTail($linkList,10);//尾插法创建链表
-show($linkList);//打印出链表
-insert($linkList,3,'a');//插入
-show($linkList);
-delete($linkList,3);//删除
-show($linkList);
+print_r($lists->getNodeList());
