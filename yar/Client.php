@@ -22,4 +22,4 @@ Yar_Concurrent_Client::call("http://test.test/yar/Server.php", "say", array("hel
 Yar_Concurrent_Client::call("http://test.test/yar/Server.php", "write", array("world"), "callback");
 Yar_Concurrent_Client::call("http://test.test/yar/Server.php", "say", array("hello"), "callback");
 Yar_Concurrent_Client::call("http://test.test/yar/Server.php", "write", array("world"), "callback");
-Yar_Concurrent_Client::loop(); //send
+Yar_Concurrent_Client::loop();

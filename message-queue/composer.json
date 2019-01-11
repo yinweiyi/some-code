@@ -1,0 +1,20 @@
+{
+    "name": "wayee\/message-queue",
+    "description": "rabbitmq 短信发送",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wayee",
+            "email": "378772944@qq.com"
+        }
+    ],
+    "require": {
+        "php-amqplib/php-amqplib": "^2.8",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wayee\\MessageQueue\\": "src"
+        }
+    }
+}
