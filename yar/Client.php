@@ -6,11 +6,6 @@
  * Time: 15:32
  */
 
-/*$client = new Yar_Client("http://test.test/yar/Server.php");
-
-print_r($client->say(['hello', 'world']));*/
-
-
 function callback($retval, $callinfo) {
 
     var_dump($callinfo);
